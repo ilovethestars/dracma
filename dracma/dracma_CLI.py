@@ -1,4 +1,29 @@
 import dracma
+import database
+
+
+def first_initialization() -> None:
+    print("Hey, you! You finally awake...")
+    
+    initialization()
+    print(
+        "This is the first initialization of Dracma.\n"
+        "Let's start with a few questions...\n"    
+    )
+    print("How do you want to be called?")
+    user_name = input()
+
+    print(
+        "Cool name! Now the boring questions..."
+        "What do you want to be your preferred currency? (use ISO format)"
+    )
+    main_currency = input()
+    print("Is that even valuable? Cool, I guess...")
+
+    # Write to the config file:
+    ...
+
+    return
 
 
 def quote_of_the_day() -> None:
@@ -27,7 +52,7 @@ def menu() -> None:
     
     match input("Option: ").strip().lower():
         case "1":
-            print("Bad time *megalovania plays in a distance*")
+            database.add_to_db()
         
         case "2":
             print("With the FUR?!")
