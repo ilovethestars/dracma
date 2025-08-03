@@ -1,27 +1,35 @@
 import dracma
 import database
 
+import json
+
+
+def save_config(user_name: str, main_currency: str, db_config: dict) -> None:
+    config = {
+        "user_name": user_name,
+        "main_currency": main_currency,
+        "db_config": db_config
+    }
+    with open("config.json", "w") as file:
+        json.dump(config, file, ident=4)
+
 
 def first_initialization() -> None:
     print("Hey, you! You finally awake...")
     
     initialization()
-    print(
-        "This is the first initialization of Dracma.\n"
-        "Let's start with a few questions...\n"    
-    )
-    print("How do you want to be called?")
-    user_name = input()
-
-    print(
-        "Cool name! Now the boring questions..."
-        "What do you want to be your preferred currency? (use ISO format)"
-    )
-    main_currency = input()
-    print("Is that even valuable? Cool, I guess...")
-
+    user_name = input("How do you want to be called?\n>")
+    main_currency = input("What's you preferred currency? [ISO]\n>")
+    
     # Write to the config file:
-    ...
+    db_config = {
+        "host": "localhost",
+        "port": 3306,    
+        "user": "dracma_user",
+        "password": "senha_segura",
+        "database": "dracma_db"
+    }
+    save_config(user_name, main_currency, db_config)
 
     return
 
@@ -52,8 +60,49 @@ def menu() -> None:
     
     match input("Option: ").strip().lower():
         case "1":
-            database.add_to_db()
-        
+            print("Enter transaction details:")
+
+            from datetime import datetime
+            date = datetime.strptime(
+                input("Date [YYYY-MM-DD HH:MM:SS]: "),
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+            product = input("Product: ")
+            brand = input("Brand: ")
+            quantity = float(input("Quantity: "))
+            ammount = float(input("Ammount: "))
+            UPC = input("UPC/ISBN: ")
+            price_local = float(input("Price (local currency): "))
+            price_standard = float(input("Price (standard currency): "))
+            total_local = float(input("Total (local currency): "))
+            total_standard = float(input("Total (standard currency): "))
+            unit_price_local = float(input("Unit price (local currency): "))
+            unit_price_standard = float(input("Unit price (standard currency): "))
+            account = input("Account debited: ")
+            location = input("Location of purchase: ")
+            country = input("Country: ")
+            currency = input("Currency used (ISO): ")
+
+            database.add_transaction(
+                date,
+                product,
+                brand,
+                quantity,
+                ammount,
+                UPC,
+                price_local,
+                price_standard,
+                total_local,
+                total_standard,
+                unit_price_local,
+                unit_price_standard,
+                account,
+                location,
+                country,
+                currency
+            )
+
         case "2":
             print("With the FUR?!")
         
